@@ -13,7 +13,7 @@ cmd:text()
 cmd:text('Options')
 cmd:option('-model_type', 'rand', 'Model type. Options: rand (randomly initialized word embeddings), static (pre-trained embeddings from word2vec, static during learning), nonstatic (pre-trained embeddings, tuned during learning), multichannel (two embedding channels, one static and one nonstatic)')
 cmd:option('-data', 'MR.hdf5', 'Training data and word2vec data')
-cmd:option('-cudnn', 0, 'Use cudnn and GPUs if set to 1, otherwise set to 0')
+cmd:option('-cudnn', 1, 'Use cudnn and GPUs if set to 1, otherwise set to 0')
 cmd:option('-seed', -1, 'random seed, set -1 for actual random')
 cmd:option('-folds', 10, 'number of folds to use. If test set provided, folds=1. max 10')
 cmd:option('-debug', 1, 'print debugging info including timing, confusions')
@@ -67,7 +67,7 @@ end
 
 -- build model for training
 function build_model(w2v)
-  local ModelBuilder = require 'model.convNN'
+  local ModelBuilder = require 'convNN'
   local model_builder = ModelBuilder.new()
 
   local model
@@ -326,13 +326,13 @@ function main()
   end
 
   -- make sure output directory exists
-  if not path.exists('results') then lfs.mkdir('results') end
+  -- if not path.exists('results') then lfs.mkdir('results') end
 
   local savefile
   if opt.savefile ~= '' then
     savefile = opt.savefile
   else
-    savefile = string.format('results/%s_model.t7', os.date('%Y%m%d_%H%M'))
+    savefile = string.format('/home/hjp/Workshop/Model/sct/results/%s_model.t7', os.date('%Y%m%d_%H%M'))
   end
   print('saving results to ', savefile)
 
