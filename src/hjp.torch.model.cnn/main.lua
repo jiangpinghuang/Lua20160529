@@ -12,7 +12,7 @@ cmd:text('Convolutional net for sentence classification')
 cmd:text()
 cmd:text('Options')
 cmd:option('-model_type', 'rand', 'Model type. Options: rand (randomly initialized word embeddings), static (pre-trained embeddings from word2vec, static during learning), nonstatic (pre-trained embeddings, tuned during learning), multichannel (two embedding channels, one static and one nonstatic)')
-cmd:option('-data', 'MR.hdf5', 'Training data and word2vec data')
+cmd:option('-data', '/home/hjp/Workshop/Model/sct/MR.hdf5', 'Training data and word2vec data')
 cmd:option('-cudnn', 1, 'Use cudnn and GPUs if set to 1, otherwise set to 0')
 cmd:option('-seed', -1, 'random seed, set -1 for actual random')
 cmd:option('-folds', 10, 'number of folds to use. If test set provided, folds=1. max 10')
@@ -106,6 +106,7 @@ end
 
 function train_loop(all_train, all_train_label, test, test_label, dev, dev_label, w2v)
   -- Initialize objects
+  print(package.path)
   local Trainer = require 'trainer'
   local trainer = Trainer.new()
 
