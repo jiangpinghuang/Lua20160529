@@ -46,6 +46,15 @@ function ModelBuilder:make_net(w2v)
     local max_time
     if opt.cudnn == 1 then
       conv = cudnn.SpatialConvolution(1, opt.num_feat_maps, opt.vec_size, kernels[i])
+      print("opt.num_feat_maps:")
+      print(opt.num_feat_maps)
+      print("opt.vec_size:")
+      print(opt.vec_size)
+      print("kernels[i]:")
+      print(kernels[i])
+      print("opt.kernels:")
+      print(opt.kernels)
+
       if opt.model_type == 'multichannel' then
         local lookup_conv = {}
         for chan = 1, 2 do
