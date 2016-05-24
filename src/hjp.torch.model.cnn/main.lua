@@ -227,7 +227,7 @@ function load_data()
   local test, test_label
 
   print('loading data...')
-  local f = hdf5.open(opt.data, 'r')
+  local f = hdf5.open(opt.data, 'r')    -- so it needs hdf5 package, note that the expression for read .hdf5 file. --
   local w2v = f:read('w2v'):all()
   train = f:read('train'):all()
   train_label = f:read('train_label'):all()
@@ -261,10 +261,10 @@ function main()
   end
   if opt.cudnn == 1 then
     require 'cutorch'
-    if opt.seed ~= -1 then
+    if opt.seed ~= -1 then    -- if opt.seed ~= -1 then opt.seed has a value for the seed.--
       cutorch.manualSeedAll(opt.seed)
     end
-    cutorch.setDevice(opt.gpuid)
+    cutorch.setDevice(opt.gpuid)    -- choose gpu index, which begins 0. --
   end
 
   -- Read HDF5 training data
@@ -272,7 +272,7 @@ function main()
   local test, test_label
   local dev, dev_label
   local w2v
-  train, train_label, test, test_label, dev, dev_label, w2v = load_data()
+  train, train_label, test, test_label, dev, dev_label, w2v = load_data()   -- load the data and label from the dataset. --
 
   opt.vocab_size = w2v:size(1)
   opt.vec_size = w2v:size(2)

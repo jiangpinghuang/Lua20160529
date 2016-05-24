@@ -1,0 +1,12 @@
+torch.manualSeed(2345)
+print(torch.random())
+
+gen = torch.Generator()
+torch.manualSeed(gen, 0)
+print(torch.random(gen))
+print(torch.random(gen))
+print(torch.random())
+torch.manualSeed(0)
+print(torch.uniform())
+torch.manualSeed(torch.initialSeed())
+print(torch.uniform())
