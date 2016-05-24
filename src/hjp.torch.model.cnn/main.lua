@@ -254,7 +254,7 @@ end
 
 function main()
   -- parse arguments
-  opt = cmd:parse(arg)
+  opt = cmd:parse(arg)        --store cmd arguments to opt.--
 
   if opt.seed ~= -1 then
     torch.manualSeed(opt.seed)
