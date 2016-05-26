@@ -154,8 +154,8 @@ print(m.bias)
 A example for image classification with neural networks.
 --]]
 require 'paths'
-trainset = torch.load('/home/hjp/Downloads/nn/cifar10-train.t7')
-testset = torch.load('/home/hjp/Downloads/nn/cifar10-test.t7')
+trainset = torch.load('/home/hjp/Workshop/Model/corpus/cifar/torch/cifar10-train.t7')
+testset = torch.load('/home/hjp/Workshop/Model/corpus/cifar/torch/cifar10-test.t7')
 classes = {'airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'}
 
 print(trainset)
@@ -169,12 +169,11 @@ setmetatable(trainset,
 );
 trainset.data = trainset.data:double()
 
-print("hint!!")
 function trainset:size()
-  return self.data.size(1)
+  return self.data:size(1)          -- note that the spelling colon(:) and dot(.).
 end
-print("hint!!")
---print(trainset:size())
+
+print(trainset:size())
 print(trainset[33])
 redChannel = trainset.data[{ {}, {1}, {}, {} }]
 print(#redChannel)
@@ -210,8 +209,8 @@ criterion = nn.ClassNLLCriterion()
 trainer = nn.StochasticGradient(cnn, criterion)
 trainer.learningRate = 0.001
 trainer.maxIteration = 5
---trainer:train(trainset)
---print(classes[test.label[100]])
+trainer:train(trainset)
+print(classes[test.label[100]])
 
 testset.data = testset.data:double()
 for i = 1, 3 do
