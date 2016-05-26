@@ -12,8 +12,8 @@ cmd:text('Convolutional net for sentence classification')
 cmd:text()
 cmd:text('Options')
 cmd:option('-model_type', 'rand', 'Model type. Options: rand (randomly initialized word embeddings), static (pre-trained embeddings from word2vec, static during learning), nonstatic (pre-trained embeddings, tuned during learning), multichannel (two embedding channels, one static and one nonstatic)')
-cmd:option('-data', 'MR.hdf5', 'Training data and word2vec data')
-cmd:option('-cudnn', 0, 'Use cudnn and GPUs if set to 1, otherwise set to 0')
+cmd:option('-data', '/home/hjp/Workshop/Model/sct/custom.hdf5', 'Training data and word2vec data')
+cmd:option('-cudnn', 1, 'Use cudnn and GPUs if set to 1, otherwise set to 0')
 cmd:option('-seed', -1, 'random seed, set -1 for actual random')
 cmd:option('-folds', 10, 'number of folds to use. If test set provided, folds=1. max 10')
 cmd:option('-debug', 1, 'print debugging info including timing, confusions')
@@ -26,9 +26,9 @@ cmd:text()
 cmd:option('-has_test', 1, 'If data has test, we use it. Otherwise, we use CV on folds')
 cmd:option('-has_dev', 1, 'If data has dev, we use it, otherwise we split from train')
 cmd:option('-num_classes', 2, 'Number of output classes')
-cmd:option('-max_sent', 59, 'maximum sentence length')
+cmd:option('-max_sent', 40, 'maximum sentence length')
 cmd:option('-vec_size', 300, 'word2vec vector size')
-cmd:option('-vocab_size', 18766, 'Vocab size')
+cmd:option('-vocab_size', 10780, 'Vocab size')
 cmd:text()
 
 -- Training own dataset
@@ -67,7 +67,7 @@ end
 
 -- build model for training
 function build_model(w2v)
-  local ModelBuilder = require 'model.convNN'
+  local ModelBuilder = require 'convNN'
   local model_builder = ModelBuilder.new()
 
   local model
@@ -283,7 +283,11 @@ function main()
   loadstring("opt.kernels = " .. opt.kernels)()
 
   if opt.zero_indexing == 1 then
+    print("train: ")
+    print(train)
     train:add(1)
+    --print()
+    
     train_label:add(1)
     if dev ~= nil then
       dev:add(1)
@@ -332,7 +336,7 @@ function main()
   if opt.savefile ~= '' then
     savefile = opt.savefile
   else
-    savefile = string.format('results/%s_model.t7', os.date('%Y%m%d_%H%M'))
+    savefile = string.format('/home/hjp/Workshop/Model/sct/results/%s_model.t7', os.date('%Y%m%d_%H%M'))
   end
   print('saving results to ', savefile)
 

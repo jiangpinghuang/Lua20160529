@@ -204,6 +204,8 @@ cnn:add(nn.ReLU())
 cnn:add(nn.Linear(84, 10))
 cnn:add(nn.LogSoftMax())
 
+timer = torch.Timer()
+
 criterion = nn.ClassNLLCriterion()
 
 trainer = nn.StochasticGradient(cnn, criterion)
@@ -252,6 +254,9 @@ for i = 1, #classes do
   print(classes[i], 100 * class_performance[i]/1000 .. ' %')
 end
 
+print('Timer elapsed for CPU: ' .. timer:time().real .. ' seconds')
+
+timerGPU = torch.Timer()
 --[[
 Neural Networks on GPUs using CUDA.
 --]]
@@ -265,3 +270,47 @@ trainer = nn.StochasticGradient(cnn, criterion)
 trainer.learningRate = 0.001
 trainer.maxIteration = 5
 trainer:train(trainset)
+print("train in cuda!")
+print(classes[testset.label[100]])
+
+testset.data = testset.data:cuda()
+for i = 1, 3 do
+  testset.data[{ {}, {i}, {}, {}}]:add(-mean[i]) 
+  testset.data[{ {}, {i}, {}, {}}]:div(stdv[i])
+end
+
+horse = testset.data[100]
+print(horse:mean(), horse:std())
+print(classes[testset.label[100]])
+predicted = cnn:forward(testset.data[100])
+print(predicted:exp())
+for i = 1, predicted:size(1) do
+  print(classes[i], predicted[i])
+end
+
+correct = 0
+for i = 1, 10000 do
+  local groundtruth = testset.label[i]
+  local prediction = cnn:forward(testset.data[i])
+  local confidences, indices = torch.sort(prediction, true)
+  if groundtruth == indices[1] then
+    correct = correct + 1
+  end
+end
+
+print(correct, 100 * correct / 10000 .. ' % ')
+class_performance = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+for i = 1, 10000 do
+  local groundtruth = testset.label[i]
+  local prediction = cnn:forward(testset.data[i])
+  local confidences, indices = torch.sort(prediction, true)
+  if groundtruth == indices[1] then
+    class_performance[groundtruth] = class_performance[groundtruth] + 1
+  end
+end
+
+for i = 1, #classes do
+  print(classes[i], 100 * class_performance[i]/1000 .. ' %')
+end
+
+print('Timer elapsed for GPU: ' .. timerGPU:time().real .. ' seconds')
