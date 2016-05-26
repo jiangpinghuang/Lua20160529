@@ -210,7 +210,7 @@ trainer = nn.StochasticGradient(cnn, criterion)
 trainer.learningRate = 0.001
 trainer.maxIteration = 5
 trainer:train(trainset)
-print(classes[test.label[100]])
+print(classes[testset.label[100]])
 
 testset.data = testset.data:double()
 for i = 1, 3 do
