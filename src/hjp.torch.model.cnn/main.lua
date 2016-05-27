@@ -18,7 +18,7 @@ cmd:option('-seed', -1, 'random seed, set -1 for actual random')
 cmd:option('-folds', 10, 'number of folds to use. If test set provided, folds=1. max 10')
 cmd:option('-debug', 1, 'print debugging info including timing, confusions')
 cmd:option('-gpuid', 1, 'GPU device id to use.')
-cmd:option('-savefile', '', 'Name of output file, which will hold the trained model, model parameters, and training scores. Default filename is TIMESTAMP_results')
+cmd:option('-savefile', '/home/hjp/Workshop/Model/sct/results/model.t7', 'Name of output file, which will hold the trained model, model parameters, and training scores. Default filename is TIMESTAMP_results')
 cmd:option('-zero_indexing', 0, 'If data is zero indexed')
 cmd:text()
 
@@ -330,7 +330,7 @@ function main()
   end
 
   -- make sure output directory exists
-  if not path.exists('results') then lfs.mkdir('results') end
+  -- if not path.exists('results') then lfs.mkdir('results') end
 
   local savefile
   if opt.savefile ~= '' then
