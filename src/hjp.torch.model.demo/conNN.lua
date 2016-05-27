@@ -8,9 +8,12 @@ trainset = torch.load('/home/hjp/Workshop/Model/corpus/cifar/torch/cifar10-train
 testset = torch.load('/home/hjp/Workshop/Model/corpus/cifar/torch/cifar10-test.t7')
 classes = {'airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'}
 
+print("trainset:")
 print(trainset)
+print("#trainset.data:")
 print(#trainset.data)
-print(classes[trainset.label[100]])
+print("classes[trainset.label[1966]]:")
+print(classes[trainset.label[1966]])
 
 setmetatable(trainset,
     {__index = function(t, i)
@@ -23,9 +26,12 @@ function trainset:size()
   return self.data:size(1)          -- note that the spelling colon(:) and dot(.).
 end
 
+print("trainset:size():")
 print(trainset:size())
-print(trainset[33])
+print("trainset[1966]:")
+print(trainset[1966])
 redChannel = trainset.data[{ {}, {1}, {}, {} }]
+print("#redChannel:")
 print(#redChannel)
 
 mean = {}
@@ -66,8 +72,8 @@ trainset.data = trainset.data:cuda()
 trainset.label = trainset.label:cuda()
 
 trainer = nn.StochasticGradient(cnn, criterion)
-trainer.learningRate = 0.001
-trainer.maxIteration = 5
+trainer.learningRate = 0.005
+trainer.maxIteration = 10
 trainer:train(trainset)
 print("train in cuda!")
 print(classes[testset.label[100]])
@@ -80,8 +86,12 @@ end
 
 horse = testset.data[100]
 print(horse:mean(), horse:std())
-print(classes[testset.label[100]])
+print("classes[testset.label[200]]:")
+print(classes[testset.label[200]])
+print("classes[testset.label[2000]]:")
+print(classes[testset.label[2000]])
 predicted = cnn:forward(testset.data[100])
+print("predicted:exp():")
 print(predicted:exp())
 for i = 1, predicted:size(1) do
   print(classes[i], predicted[i])
@@ -89,9 +99,18 @@ end
 
 correct = 0
 for i = 1, 10000 do
+  --print("testset.label[" .. i .. "]: " .. testset.label[i] .. " : " .. classes[testset.label[i]])
   local groundtruth = testset.label[i]
   local prediction = cnn:forward(testset.data[i])
+  --print("cnn:forward(testset.data[i]): ")
+  print(cnn:forward(testset.data[i]))
   local confidences, indices = torch.sort(prediction, true)
+  --print("torch.sort(prediction, true):")
+  --print(torch.sort(prediction, true))
+  --print("confidences: ")
+  --print(confidences)
+  --print("indices: ")
+  --print(indices)
   if groundtruth == indices[1] then
     correct = correct + 1
   end
